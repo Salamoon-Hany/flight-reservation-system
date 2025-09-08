@@ -15,9 +15,8 @@ class BookingPage(tk.Toplevel):
         self.secondary_color = "#f0f5f9"
         self.text_color = "#333333"
         
-        
         try:
-            self.iconbitmap("assets/favicon.ico")
+            self.iconbitmap(r"D:\VS-Python\Flight_reservation\2530820_airplane_airplane mode_general_office_plane_icon.ico")
         except:
             pass
         

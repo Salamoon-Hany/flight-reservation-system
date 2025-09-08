@@ -9,7 +9,7 @@ def main():
     root.title("FlySky Reservations")
     
     try:
-        root.iconbitmap("assets/favicon.ico")
+        root.iconbitmap(r"D:\VS-Python\Flight_reservation\2530820_airplane_airplane mode_general_office_plane_icon.ico")
     except:
         pass
     
