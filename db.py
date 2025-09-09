@@ -51,6 +51,55 @@ def update_reservation(res_id, passenger_name, flight_number, date, seat, destin
 def delete_reservation(res_id):
     conn = get_conn()
     c = conn.cursor()
+    
+    # Delete the reservation
     c.execute("DELETE FROM reservations WHERE id=?", (res_id,))
+    
+    # Renumber all IDs to be sequential
+    c.execute("""
+        UPDATE reservations 
+        SET id = (
+            SELECT COUNT(*) 
+            FROM reservations r2 
+            WHERE r2.rowid <= reservations.rowid
+        )
+    """)
+    
+    # Reset the auto-increment counter
+    c.execute("UPDATE SQLITE_SEQUENCE SET seq = (SELECT MAX(id) FROM reservations) WHERE name='reservations'")
+    
+    conn.commit()
+    conn.close()
+
+def renumber_all_ids():
+    """Utility function to renumber all reservation IDs"""
+    conn = get_conn()
+    c = conn.cursor()
+    
+    # Create a temporary table with sequential IDs
+    c.execute("DROP TABLE IF EXISTS temp_reservations")
+    c.execute("""
+        CREATE TABLE temp_reservations AS 
+        SELECT ROW_NUMBER() OVER (ORDER BY id) as new_id, 
+               passenger_name, flight_number, date, seat, destination, ticket_class
+        FROM reservations
+    """)
+    
+    # Clear original table
+    c.execute("DELETE FROM reservations")
+    
+    # Insert back with new sequential IDs
+    c.execute("""
+        INSERT INTO reservations (id, passenger_name, flight_number, date, seat, destination, ticket_class)
+        SELECT new_id, passenger_name, flight_number, date, seat, destination, ticket_class
+        FROM temp_reservations
+    """)
+    
+    # Clean up
+    c.execute("DROP TABLE temp_reservations")
+    
+    # Reset auto-increment
+    c.execute("UPDATE SQLITE_SEQUENCE SET seq = (SELECT MAX(id) FROM reservations) WHERE name='reservations'")
+    
     conn.commit()
     conn.close()
