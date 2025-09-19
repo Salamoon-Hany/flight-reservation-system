@@ -9,9 +9,9 @@ def main():
     root.title("FlySky Reservations")
     
     try:
-        root.iconbitmap(r"D:\VS-Python\Flight_reservation\2530820_airplane_airplane mode_general_office_plane_icon.ico")
-    except:
-        pass
+        root.iconbitmap(r"D:\VS-Python\New folder\Palne Icon.ico")
+    except Exception as e:
+        print(f"Icon load failed: {e}")
     
     app = HomePage(root)
     root.mainloop()

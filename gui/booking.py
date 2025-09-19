@@ -16,9 +16,9 @@ class BookingPage(tk.Toplevel):
         self.text_color = "#333333"
         
         try:
-            self.iconbitmap(r"D:\VS-Python\Flight_reservation\2530820_airplane_airplane mode_general_office_plane_icon.ico")
-        except:
-            pass
+            self.iconbitmap(r"D:\VS-Python\New folder\Palne Icon.ico")
+        except Exception as e:
+            print(f"Icon load failed: {e}")
         
         
         nav_bar = tk.Frame(self, bg=self.primary_color, height=60)
